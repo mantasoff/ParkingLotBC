@@ -4,7 +4,7 @@ table 50101 ParkingLotUsers
     Caption = 'Parking Lot Users';
     fields
     {
-        field(1; ParkingLotCode; Integer)
+        field(1; ParkingLotCode; Code[20])
         {
             Caption = 'Parking Lot Code';
             TableRelation = ParkingLot;

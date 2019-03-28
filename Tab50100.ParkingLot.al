@@ -1,6 +1,5 @@
 table 50100 ParkingLot
 {
-    DataClassification = ToBeClassified;
     Caption = 'Parking Lot';
     fields
     {
@@ -10,7 +9,7 @@ table 50100 ParkingLot
         }
         field(21; Adress; Text[200])
         {
-            Caption = 'Description';
+            Caption = 'Adress';
         }
         field(30; Description; Text[200])
         {
@@ -25,5 +24,18 @@ table 50100 ParkingLot
             Clustered = true;
         }
     }
+
+    trigger OnDelete()
+    var
+        ParkingLotUsers: Record ParkingLotUsers;
+        ParkingSpace: Record ParkingSpace;
+    begin
+        ParkingLotUsers.SetRange(ParkingLotCode, Code);
+        ParkingLotUsers.DeleteAll();
+
+        ParkingSpace.SetRange(ParkingLotCode, Code);
+        ParkingSpace.DeleteAll();
+
+    end;
 
 }

@@ -20,6 +20,7 @@ table 50103 SpaceType
         field(40; ReservationPeriod; Integer)
         {
             Caption = 'Reservation Period';
+            MinValue = 0;
         }
 
     }
