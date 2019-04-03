@@ -55,13 +55,36 @@ page 50102 ParkingSpaces
                 Image = Reserve;
                 trigger OnAction()
                 begin
-                    MESSAGE('Place Holder');
+                    IF IsReserved then
+                        Error(ReservedError);
+                    IsReserved := true;
+                    ParkingLotUserID := USERID;
+                    MODIFY;
                 end;
 
+            }
+            action(CancelReservation)
+            {
+                ApplicationArea = All;
+                Caption = 'Cancel Reservation';
+                Image = CancelLine;
+                trigger OnAction()
+                begin
+                    if not IsReserved then
+                        Error(NotReservedError);
+                    if not (UserId() = ParkingLotUserID) then
+                        Error(NotUserSpace);
+                    IsReserved := false;
+                    ParkingLotUserID := '';
+                    Modify();
+                end;
             }
         }
     }
 
     var
         myInt: Integer;
+        ReservedError: TextConst ENU = 'This space is already reserved';
+        NotReservedError: TextConst ENU = 'This space is not reserved';
+        NotUserSpace: TextConst ENU = 'This space is not reserved for this user';
 }

@@ -43,6 +43,12 @@ table 50105 ParkingSpace
                     ReservedUntil := CreateDateTime(0D, tempTime);
             end;
         }
+
+        field(45; ReservationType; Option)
+        {
+            Caption = 'Reservation Types';
+            OptionMembers = "Individual","Monthly","Both";
+        }
         field(50; ReservedUntil; DateTime)
         {
             Caption = 'Reserved Until';
