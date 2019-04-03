@@ -1,6 +1,7 @@
 table 50100 ParkingLot
 {
     Caption = 'Parking Lot';
+
     fields
     {
         field(1; Code; Code[20])

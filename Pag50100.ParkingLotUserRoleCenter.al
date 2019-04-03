@@ -7,8 +7,12 @@ page 50100 ParkingLotUserRoleCenter
 
     layout
     {
-        area(Content)
+        area(RoleCenter)
         {
+            part(ParkingLotQues; ParkingLotQues)
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

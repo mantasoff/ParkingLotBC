@@ -3,20 +3,25 @@ page 50101 ParkingLotQues
     PageType = CardPart;
     ApplicationArea = All;
     UsageCategory = Administration;
-    Caption = 'Parking Lot Ques';
+    Caption = 'Parking Lot Reservation Information';
 
     layout
     {
         area(Content)
         {
+
             cuegroup(ParkingSpaces)
             {
+                Caption = 'Reservations';
+
                 field(NotReserved; NotReservedParkingSpaces)
                 {
+                    ApplicationArea = All;
                     Caption = 'Not Reserved Spaces';
                 }
                 field(ReservedParkingSpaces; ReservedParkingSpaces)
                 {
+                    ApplicationArea = All;
                     Caption = 'Reserved Spaces';
                 }
             }
@@ -47,4 +52,6 @@ page 50101 ParkingLotQues
     begin
         //Reikia apskaiciavimo formules visam sitam dalykui.
     end;
+
+
 }
