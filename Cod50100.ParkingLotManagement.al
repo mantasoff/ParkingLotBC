@@ -36,7 +36,6 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.ParkingLotUserID := USERID;
 
         ParkingSpace.MODIFY;
-
     end;
 
     procedure CancelReservation(ParkingSpace: Record ParkingSpace; User: Code[50])
