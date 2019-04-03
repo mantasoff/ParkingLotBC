@@ -55,11 +55,7 @@ page 50102 ParkingSpaces
                 Image = Reserve;
                 trigger OnAction()
                 begin
-                    IF IsReserved then
-                        Error(ReservedError);
-                    IsReserved := true;
-                    ParkingLotUserID := USERID;
-                    MODIFY;
+                    ParkingLotManagement.ReserveSpace(Rec, UserId());
                 end;
 
             }
@@ -70,13 +66,7 @@ page 50102 ParkingSpaces
                 Image = CancelLine;
                 trigger OnAction()
                 begin
-                    if not IsReserved then
-                        Error(NotReservedError);
-                    if not (UserId() = ParkingLotUserID) then
-                        Error(NotUserSpace);
-                    IsReserved := false;
-                    ParkingLotUserID := '';
-                    Modify();
+                    ParkingLotManagement.CancelReservation(Rec, UserId());
                 end;
             }
         }
@@ -84,7 +74,5 @@ page 50102 ParkingSpaces
 
     var
         myInt: Integer;
-        ReservedError: TextConst ENU = 'This space is already reserved';
-        NotReservedError: TextConst ENU = 'This space is not reserved';
-        NotUserSpace: TextConst ENU = 'This space is not reserved for this user';
+        ParkingLotManagement: Codeunit ParkingLotManagement;
 }
