@@ -34,7 +34,7 @@ codeunit 50100 ParkingLotManagement
 
         ParkingSpace.IsReserved := true;
         ParkingSpace.ParkingLotUserID := USERID;
-
+        ParkingSpace.ReservedUntil := GetReservationEndDate(ParkingSpace.SpaceType);
         ParkingSpace.MODIFY;
     end;
 
@@ -47,7 +47,7 @@ codeunit 50100 ParkingLotManagement
 
         ParkingSpace.IsReserved := false;
         ParkingSpace.ParkingLotUserID := '';
-
+        ParkingSpace.ReservedUntil := 0DT;
         ParkingSpace.Modify();
     end;
 
@@ -56,6 +56,23 @@ codeunit 50100 ParkingLotManagement
         ParkingLotUsers: Record ParkingLotUsers;
     begin
         exit(ParkingLotUsers.Get(ParkingLotCode, User));
+    end;
+
+    local procedure GetReservationEndDate(SpaceTypeCode: Code[20]): DateTime
+    var
+        SpaceType: Record SpaceType;
+        ParkingLotSetup: Record ParkingLotSetup;
+        TodaysDate: Date;
+        ReservationTime: Time;
+
+
+    begin
+        ParkingLotSetup.Get();
+        SpaceType.Get(SpaceTypeCode);
+        TodaysDate := Today();
+        ReservationTime := ParkingLotSetup.ReservationStart + SpaceType.ReservationPeriod * 60000; //Minutes to Miliseconds
+
+        exit(CreateDateTime(Today, ReservationTime));
     end;
 
     var

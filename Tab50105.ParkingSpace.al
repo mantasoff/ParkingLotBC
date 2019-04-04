@@ -17,7 +17,7 @@ table 50105 ParkingSpace
         }
         field(3; Column; Integer)
         {
-            Caption = 'Row';
+            Caption = 'Column';
             MinValue = 0;
         }
         field(21; SpaceType; Code[20])

@@ -7,7 +7,7 @@ table 50102 ParkingLotUser
         field(1; UserID; Code[50])
         {
             Caption = 'User ID';
-            TableRelation = User;
+            TableRelation = "User Setup";
         }
         field(21; Name; Text[50])
         {

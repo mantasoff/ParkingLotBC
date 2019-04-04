@@ -36,6 +36,10 @@ page 50102 ParkingSpaces
                 {
                     ApplicationArea = All;
                 }
+                field(ReservedUntil; ReservedUntil)
+                {
+                    ApplicationArea = All;
+                }
                 field(ParkingLotUserID; ParkingLotUserID)
                 {
                     ApplicationArea = All;
