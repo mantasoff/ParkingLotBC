@@ -62,17 +62,18 @@ codeunit 50100 ParkingLotManagement
     var
         SpaceType: Record SpaceType;
         ParkingLotSetup: Record ParkingLotSetup;
-        TodaysDate: Date;
         ReservationTime: Time;
-
-
+        ReservationDateTime: DateTime;
+        Duration: Duration;
     begin
         ParkingLotSetup.Get();
         SpaceType.Get(SpaceTypeCode);
-        TodaysDate := Today();
         ReservationTime := ParkingLotSetup.ReservationStart + SpaceType.ReservationPeriod * 60000; //Minutes to Miliseconds
-
-        exit(CreateDateTime(Today, ReservationTime));
+        ReservationDateTime := CreateDateTime(Today, ReservationTime);
+        if ReservationDateTime < CurrentDateTime() then begin
+            ReservationDateTime := CreateDateTime(Today + 1, ReservationTime);
+        end;
+        exit(ReservationDateTime);
     end;
 
     var
