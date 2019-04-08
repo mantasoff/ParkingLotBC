@@ -60,6 +60,15 @@ table 50105 ParkingSpace
 
             end;
         }
+        field(60; MainUserID; Code[50])
+        {
+            Caption = 'Main UserID';
+            TableRelation = "User Setup";
+        }
+        field(70; isApprovedByMainUser; Boolean)
+        {
+            Caption = 'Is Approved By Main User';
+        }
     }
 
     keys

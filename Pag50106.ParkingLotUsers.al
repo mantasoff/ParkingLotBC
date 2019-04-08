@@ -4,6 +4,7 @@ page 50106 ParkingLotUsers
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = ParkingLotUsers;
+    Caption = 'Parking Lot Users';
 
     layout
     {

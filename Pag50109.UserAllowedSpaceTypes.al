@@ -4,6 +4,7 @@ page 50109 UserAllowedSpaceTypes
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = UserAllowedSpaceTypes;
+    Caption = 'User Allowed Parking Space Types';
 
     layout
     {

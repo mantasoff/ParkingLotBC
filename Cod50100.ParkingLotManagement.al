@@ -76,6 +76,11 @@ codeunit 50100 ParkingLotManagement
         exit(ReservationDateTime);
     end;
 
+    procedure MainUserReservation(Space: Record ParkingSpace; User: Code[50])
+    begin
+        //Code for Main User Reservation
+    end;
+
     var
         myInt: Integer;
         ReservedError: TextConst ENU = 'This space is already reserved';

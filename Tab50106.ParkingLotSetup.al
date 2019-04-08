@@ -6,12 +6,18 @@ table 50106 ParkingLotSetup
     {
         field(1; PrimaryKey; Code[10])
         {
-            DataClassification = ToBeClassified;
         }
         field(21; ReservationStart; Time)
         {
-            DataClassification = ToBeClassified;
             Caption = 'Reservation Start Time';
+        }
+        field(30; MainParkingLotReservationLimit; Time)
+        {
+            Caption = 'Main Parking Lot Reservation Time limit';
+        }
+        field(40; EndOfWorkTime; Time)
+        {
+            Caption = 'End Of Work Time';
         }
     }
 

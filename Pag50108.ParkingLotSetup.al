@@ -5,17 +5,27 @@ page 50108 ParkingLotSetup
     UsageCategory = Administration;
     SourceTable = ParkingLotSetup;
     Caption = 'Parking Lot Setup';
+    DeleteAllowed = false;
+    InsertAllowed = false;
 
     layout
     {
         area(Content)
         {
-            group(GroupName)
+            group("Setup Information")
             {
                 field(ReservationStart; ReservationStart)
                 {
                     ApplicationArea = All;
 
+                }
+                field(MainParkingLotReservationLimit; MainParkingLotReservationLimit)
+                {
+                    ApplicationArea = All;
+                }
+                field(EndOfWorkTime; EndOfWorkTime)
+                {
+                    ApplicationArea = All;
                 }
             }
         }
