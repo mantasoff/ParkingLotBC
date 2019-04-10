@@ -9,6 +9,10 @@ page 50100 ParkingLotUserRoleCenter
     {
         area(RoleCenter)
         {
+            part(ParkingLotHeadline; ParkingLotHeadline)
+            {
+                ApplicationArea = All;
+            }
             part(ParkingLotQues; ParkingLotQues)
             {
                 ApplicationArea = All;
