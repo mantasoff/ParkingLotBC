@@ -31,6 +31,12 @@ codeunit 50100 ParkingLotManagement
             Error(UserNotInGroupError);
         IF ParkingSpace.IsReserved then
             Error(ReservedError);
+        if ParkingSpace.MainUserID <> User then
+            if isReservedByMainUser(ParkingSpace) then
+                Error(UserIsNotAllowedToReserveMainSpot);
+
+        if ParkingSpace.MainUserID = User then
+            ParkingSpace.isApprovedByMainUser := true;
 
         ParkingSpace.IsReserved := true;
         ParkingSpace.ParkingLotUserID := USERID;
@@ -78,7 +84,25 @@ codeunit 50100 ParkingLotManagement
 
     procedure MainUserReservation(Space: Record ParkingSpace; User: Code[50])
     begin
-        //Code for Main User Reservation
+        if Space.MainUserID <> User then
+            error(NotMainUser);
+        ReserveSpace(Space, User);
+
+    end;
+
+
+
+
+    procedure isReservedByMainUser(Space: Record ParkingSpace): Boolean
+    begin
+        if Space.MainUserID = '' then
+            exit(false);
+
+        if Space.IsReserved = true then
+            exit(true);
+
+        if Space.isApprovedByMainUser = false then
+            exit(true);
     end;
 
     var
@@ -89,4 +113,7 @@ codeunit 50100 ParkingLotManagement
         UserNotParkingLotUser: TextConst ENU = 'User is not registered to use parking lot functionality';
         UserNotInGroupError: TextConst ENU = 'User is not from this space group';
         UserIsNotAllowedError: TextConst ENU = 'User is not allowed to park in this specific parking lot';
+
+        UserIsNotAllowedToReserveMainSpot: TextConst ENU = 'Main user has not yet cleared the spot for parking';
+        NotMainUser: TextConst ENU = 'You are not the Main user of this specific parking spot';
 }

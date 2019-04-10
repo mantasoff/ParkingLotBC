@@ -76,7 +76,7 @@ page 50102 ParkingSpaces
         }
     }
 
+
     var
-        myInt: Integer;
         ParkingLotManagement: Codeunit ParkingLotManagement;
 }

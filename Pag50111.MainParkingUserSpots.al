@@ -58,13 +58,25 @@ page 50111 MainParkingUserSpots
     {
         area(Processing)
         {
-            action(ActionName)
+            action(Reserve)
             {
                 ApplicationArea = All;
-
+                Caption = 'Reserve Space';
+                Image = Reserve;
                 trigger OnAction()
                 begin
+                    ParkingLotManagement.ReserveSpace(Rec, UserId());
+                end;
 
+            }
+            action(CancelReservation)
+            {
+                ApplicationArea = All;
+                Caption = 'Cancel Reservation';
+                Image = CancelLine;
+                trigger OnAction()
+                begin
+                    ParkingLotManagement.CancelReservation(Rec, UserId());
                 end;
             }
         }
@@ -78,4 +90,5 @@ page 50111 MainParkingUserSpots
 
     var
         NoParkingSpaceRegisteredError: TextConst ENU = 'No Parking Space Available for user';
+        ParkingLotManagement: Codeunit ParkingLotManagement;
 }

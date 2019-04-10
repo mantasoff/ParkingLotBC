@@ -4,6 +4,7 @@ page 50107 SpaceTypes
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = SpaceType;
+    Caption = 'Parking Lot Space Types';
 
     layout
     {

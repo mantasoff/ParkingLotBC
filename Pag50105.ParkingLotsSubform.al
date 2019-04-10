@@ -30,6 +30,10 @@ page 50105 ParkingLotsSubform
                 {
                     ApplicationArea = All;
                 }
+                field(MainUserID; MainUserID)
+                {
+                    ApplicationArea = All;
+                }
 
             }
         }
