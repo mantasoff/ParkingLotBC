@@ -18,39 +18,46 @@ page 50101 ParkingLotQues
                 {
                     ApplicationArea = All;
                     Caption = 'Not Reserved Spaces';
+                    trigger OnDrillDown()
+                    var
+                        ParkingSpace: Record ParkingSpace;
+                    begin
+                        ParkingSpace.SetRange(IsReserved, False);
+                        Page.RunModal(Page::ParkingSpaces, ParkingSpace);
+                    end;
                 }
                 field(ReservedParkingSpaces; ReservedParkingSpaces)
                 {
                     ApplicationArea = All;
                     Caption = 'Reserved Spaces';
+                    trigger OnDrillDown()
+                    var
+                        ParkingSpace: Record ParkingSpace;
+                    begin
+                        ParkingSpace.SetRange(IsReserved, true);
+                        Page.RunModal(Page::ParkingSpaces, ParkingSpace);
+                    end;
                 }
+
             }
-        }
-    }
 
-    actions
-    {
-        area(Processing)
-        {
-            action(ActionName)
-            {
-                ApplicationArea = All;
-
-                trigger OnAction()
-                begin
-
-                end;
-            }
         }
     }
 
     var
         NotReservedParkingSpaces: Integer;
-        ReservedParkingSpaces: Boolean;
+        ReservedParkingSpaces: Integer;
 
     trigger OnOpenPage()
+    var
+        ParkingSpace: Record ParkingSpace;
     begin
-        //Reikia apskaiciavimo formules visam sitam dalykui.
+        ParkingSpace.SetRange(IsReserved, false);
+        NotReservedParkingSpaces := ParkingSpace.Count;
+        ParkingSpace.Reset();
+        ParkingSpace.SetRange(IsReserved, true);
+        ReservedParkingSpaces := ParkingSpace.Count;
+
     end;
 
 

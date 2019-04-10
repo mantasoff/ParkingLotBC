@@ -13,6 +13,10 @@ page 50100 ParkingLotUserRoleCenter
             {
                 ApplicationArea = All;
             }
+            part(ReservedParkingSpaces; ReservedParkingSpacesPagePart)
+            {
+                ApplicationArea = All;
+            }
         }
     }
 
@@ -20,10 +24,47 @@ page 50100 ParkingLotUserRoleCenter
     {
         area(Processing)
         {
-            action(ActionName)
+            action(ParkingLotSetup)
+            {
+                Caption = 'Parking Lot Setup';
+                ApplicationArea = All;
+                RunPageMode = Edit;
+                RunObject = Page ParkingLotSetup;
+            }
+            action(ParkingLotUsers)
             {
                 ApplicationArea = All;
-
+                Caption = 'Parking Lot Users';
+                RunPageMode = View;
+                RunObject = Page ParkingLotUsers;
+            }
+            action(ParkingLotApplicationUsers)
+            {
+                ApplicationArea = All;
+                Caption = 'Parking Lot Application Users';
+                RunPageMode = View;
+                RunObject = Page ParkingLotAppUsers;
+            }
+            action(ParkingLots)
+            {
+                ApplicationArea = All;
+                Caption = 'Parking Lots';
+                RunPageMode = View;
+                RunObject = Page ParkingLots;
+            }
+            action(SpaceTypes)
+            {
+                ApplicationArea = All;
+                Caption = 'Space Types';
+                RunPageMode = View;
+                RunObject = Page SpaceTypes;
+            }
+            action(UserAllowedSpaceTypes)
+            {
+                ApplicationArea = All;
+                Caption = 'User Allowed Space Types';
+                RunPageMode = View;
+                RunObject = Page UserAllowedSpaceTypes;
             }
         }
     }
