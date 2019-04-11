@@ -7,8 +7,10 @@ page 50100 ParkingLotUserRoleCenter
 
     layout
     {
+
         area(RoleCenter)
         {
+
             part(ParkingLotHeadline; ParkingLotHeadline)
             {
                 ApplicationArea = All;
@@ -17,6 +19,7 @@ page 50100 ParkingLotUserRoleCenter
             {
                 ApplicationArea = All;
             }
+
             part(ReservedParkingSpaces; ReservedParkingSpacesPagePart)
             {
                 ApplicationArea = All;

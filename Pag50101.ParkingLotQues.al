@@ -38,6 +38,12 @@ page 50101 ParkingLotQues
                         Page.RunModal(Page::ParkingSpaces, ParkingSpace);
                     end;
                 }
+                field(ChangeLogEntries; ChangeLogEntries)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Changes Today';
+                }
+
 
             }
 
@@ -47,6 +53,7 @@ page 50101 ParkingLotQues
     var
         NotReservedParkingSpaces: Integer;
         ReservedParkingSpaces: Integer;
+        ChangeLogEntries: Integer;
 
     trigger OnOpenPage()
     var

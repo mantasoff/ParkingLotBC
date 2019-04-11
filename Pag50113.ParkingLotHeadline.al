@@ -5,12 +5,16 @@ page 50113 ParkingLotHeadline
     UsageCategory = Administration;
     layout
     {
-        area(Content)
+
+        area(content)
         {
-            field(Field1; HeadlineConstant)
+
+            field(Headline1; HeadlineConstant)
             {
-                ShowCaption = false;
-                Visible = true;
+                ApplicationArea = All;
+            }
+            field(Headline2; HeadlineConstant)
+            {
                 ApplicationArea = All;
             }
         }
@@ -18,5 +22,6 @@ page 50113 ParkingLotHeadline
 
 
     var
-        HeadlineConstant: TextConst ENU = 'Welcome to the BC  integration!';
+        HeadlineConstant: TextConst ENU = '<qualifier>Welcome</qualifier><payload>Welcome to the <emphasize>Parking Lot</emphasize> integration for D365BC.</payload>';
+
 }
