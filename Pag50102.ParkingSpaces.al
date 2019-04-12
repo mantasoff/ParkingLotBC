@@ -36,6 +36,10 @@ page 50102 ParkingSpaces
                 {
                     ApplicationArea = All;
                 }
+                field(isGuestReservation; isGuestReservation)
+                {
+                    ApplicationArea = All;
+                }
                 field(ReservedUntil; ReservedUntil)
                 {
                     ApplicationArea = All;
@@ -73,10 +77,34 @@ page 50102 ParkingSpaces
                     ParkingLotManagement.CancelReservation(Rec, UserId());
                 end;
             }
+            action(GuestReservation)
+            {
+                ApplicationArea = All;
+                Caption = 'Reserve for Guest';
+                Image = ExternalDocument;
+                Visible = GuestVisibility;
+                trigger OnAction()
+                begin
+                    ParkingLotManagement.guestReservation(Rec, UserId);
+                end;
+            }
         }
     }
-
+    trigger OnOpenPage()
+    var
+    begin
+        CheckVisibility();
+    end;
 
     var
         ParkingLotManagement: Codeunit ParkingLotManagement;
+        GuestVisibility: Boolean;
+
+    local procedure CheckVisibility()
+    var
+        ParkingLotSetup: Record ParkingLotSetup;
+    begin
+        ParkingLotSetup.Get;
+        GuestVisibility := ParkingLotSetup.EnableGuestFunctionality;
+    end;
 }

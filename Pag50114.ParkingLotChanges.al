@@ -5,6 +5,7 @@ page 50114 ParkingLotChanges
     UsageCategory = Lists;
     SourceTable = ParkingLotChanges;
     Caption = 'Parking Lot Changes';
+    Editable = false;
     layout
     {
         area(Content)
@@ -12,6 +13,10 @@ page 50114 ParkingLotChanges
             repeater("Parking Lot Changes")
             {
                 field(EntryNo; EntryNo)
+                {
+                    ApplicationArea = All;
+                }
+                field(EntryDT; EntryDT)
                 {
                     ApplicationArea = All;
                 }

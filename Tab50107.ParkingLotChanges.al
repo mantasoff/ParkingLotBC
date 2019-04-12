@@ -9,6 +9,11 @@ table 50107 ParkingLotChanges
             DataClassification = ToBeClassified;
             Caption = 'Entry No.';
         }
+        field(20; EntryDT; DateTime)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Entry Date and Time';
+        }
         field(21; ParkingLotCode; Code[20])
         {
             DataClassification = ToBeClassified;
@@ -56,6 +61,7 @@ table 50107 ParkingLotChanges
     begin
         if ParkingLotChanges.FindLast() then;
         EntryNo := ParkingLotChanges.EntryNo + 1;
+        EntryDT := CurrentDateTime;
     end;
 
     procedure AddEntry(ParkingLotCodeP: Code[50]; RowP: Integer; ColumnP: Integer; UserIDP: Code[50]; Description1P: Text[250]; Description2P: Text[250])

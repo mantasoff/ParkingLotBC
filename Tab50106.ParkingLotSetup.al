@@ -19,6 +19,10 @@ table 50106 ParkingLotSetup
         {
             Caption = 'End Of Work Time';
         }
+        field(50; EnableGuestFunctionality; Boolean)
+        {
+            Caption = 'Enable Guest Functionality';
+        }
     }
 
     keys

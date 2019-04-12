@@ -69,6 +69,10 @@ table 50105 ParkingSpace
         {
             Caption = 'Is Approved By Main User';
         }
+        field(80; isGuestReservation; Boolean)
+        {
+            Caption = 'Is Guest Reservation';
+        }
     }
 
     keys

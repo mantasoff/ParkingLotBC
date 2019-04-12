@@ -105,6 +105,25 @@ codeunit 50100 ParkingLotManagement
             exit(true);
     end;
 
+    procedure guestReservation(ParkingSpace: Record ParkingSpace; User: Code[50])
+    var
+        ParkingLotSetup: Record ParkingLotSetup;
+    begin
+        ParkingLotSetup.Get;
+        if ParkingSpace.IsReserved then
+            if not Confirm(AlreadyReservedByUser) then exit;
+        ParkingSpace.IsReserved := true;
+        ParkingSpace.ParkingLotUserID := User;
+        ParkingSpace.isGuestReservation := true;
+        ParkingSpace.isApprovedByMainUser := true;
+        if DT2Time(CurrentDateTime) > ParkingLotSetup.EndOfWorkTime then begin
+            ParkingSpace.ReservedUntil := CreateDateTime(Today, ParkingLotSetup.EndOfWorkTime);
+        end else begin
+            ParkingSpace.ReservedUntil := CreateDateTime(Today + 1, ParkingLotSetup.EndOfWorkTime);
+        end;
+        ParkingSpace.Modify();
+    end;
+
     var
         myInt: Integer;
         ReservedError: TextConst ENU = 'This space is already reserved';
@@ -116,4 +135,5 @@ codeunit 50100 ParkingLotManagement
 
         UserIsNotAllowedToReserveMainSpot: TextConst ENU = 'Main user has not yet cleared the spot for parking';
         NotMainUser: TextConst ENU = 'You are not the Main user of this specific parking spot';
+        AlreadyReservedByUser: TextConst ENU = 'This space is already reserved. Do you want to overwrite this reservation for the guest?';
 }

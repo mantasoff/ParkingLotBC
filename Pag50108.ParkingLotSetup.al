@@ -27,6 +27,10 @@ page 50108 ParkingLotSetup
                 {
                     ApplicationArea = All;
                 }
+                field(EnableGuestFunctionality; EnableGuestFunctionality)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }
@@ -34,5 +38,6 @@ page 50108 ParkingLotSetup
     trigger OnOpenPage()
     begin
         If Not Get then Insert;
+
     end;
 }

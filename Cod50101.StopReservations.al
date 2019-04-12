@@ -12,6 +12,7 @@ codeunit 50101 StopReservations
                     ParkingSpaces.IsReserved := false;
                     ParkingSpaces.ReservedUntil := 0DT;
                     ParkingSpaces.ParkingLotUserID := '';
+                    ParkingSpaces.isGuestReservation := false;
                     ParkingSpaces.Modify();
                 end;
             until ParkingSpaces.Next() = 0;

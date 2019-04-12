@@ -42,6 +42,10 @@ page 50101 ParkingLotQues
                 {
                     ApplicationArea = All;
                     Caption = 'Changes Today';
+                    trigger OnDrillDown()
+                    begin
+                        Page.RunModal(Page::ParkingLotChanges);
+                    end;
                 }
 
 
@@ -58,12 +62,15 @@ page 50101 ParkingLotQues
     trigger OnOpenPage()
     var
         ParkingSpace: Record ParkingSpace;
+        ParkingLotChanges: Record ParkingLotChanges;
     begin
         ParkingSpace.SetRange(IsReserved, false);
         NotReservedParkingSpaces := ParkingSpace.Count;
         ParkingSpace.Reset();
         ParkingSpace.SetRange(IsReserved, true);
         ReservedParkingSpaces := ParkingSpace.Count;
+
+
 
     end;
 
