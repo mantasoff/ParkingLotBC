@@ -21,6 +21,8 @@ codeunit 50100 ParkingLotManagement
     end;
 
     procedure ReserveSpace(ParkingSpace: Record ParkingSpace; User: Code[50])
+    var
+        ParkingLotSetup: Record ParkingLotSetup;
     begin
 
         if not IsUserParkingLotUser(User) then
@@ -34,6 +36,11 @@ codeunit 50100 ParkingLotManagement
         if ParkingSpace.MainUserID <> User then
             if isReservedByMainUser(ParkingSpace) then
                 Error(UserIsNotAllowedToReserveMainSpot);
+        ParkingLotSetup.Get();
+
+        if ParkingLotSetup.EnableTwoStepReservation then begin
+
+        end;
 
         if ParkingSpace.MainUserID = User then
             ParkingSpace.isApprovedByMainUser := true;
@@ -146,6 +153,23 @@ codeunit 50100 ParkingLotManagement
         exit(false);
     end;
 
+    procedure CheckReservationPriority(User: Code[50])
+    var
+        ParkingLotSetup: Record ParkingLotSetup;
+        ParkingLotUser: Record ParkingLotUser;
+        PresentTime: Time;
+    begin
+        ParkingLotSetup.Get;
+        ParkingLotUser.Get(User);
+        PresentTime := Time;
+
+        if (PresentTime > ParkingLotSetup.EndOfWorkTime) and
+        (PresentTime < ParkingLotSetup.FirstStepReservationTime) and
+        (ParkingLotUser.ParkingReservationPriority = ParkingLotUser.ParkingReservationPriority::Low) then begin
+            Error(NotHighPriorityError);
+        end;
+    end;
+
     var
         myInt: Integer;
         ReservedError: TextConst ENU = 'This space is already reserved';
@@ -158,4 +182,5 @@ codeunit 50100 ParkingLotManagement
         UserIsNotAllowedToReserveMainSpot: TextConst ENU = 'Main user has not yet cleared the spot for parking';
         NotMainUser: TextConst ENU = 'You are not the Main user of this specific parking spot';
         AlreadyReservedByUser: TextConst ENU = 'This space is already reserved. Do you want to overwrite this reservation for the guest?';
+        NotHighPriorityError: TextConst ENU = 'Your reservation priority is not high. You may need to wait up to an hour to be allowed to reserve a parking space';
 }

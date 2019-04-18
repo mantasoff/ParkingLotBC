@@ -17,15 +17,21 @@ page 50108 ParkingLotSetup
                 field(ReservationStart; ReservationStart)
                 {
                     ApplicationArea = All;
-
+                    Width = 8;
                 }
                 field(MainParkingLotReservationLimit; MainParkingLotReservationLimit)
                 {
                     ApplicationArea = All;
+                    Caption = 'Private Spot Res. Time';
                 }
                 field(EndOfWorkTime; EndOfWorkTime)
                 {
                     ApplicationArea = All;
+                }
+                field(FirstStepReservationTime; FirstStepReservationTime)
+                {
+                    ApplicationArea = All;
+                    Caption = 'First Step Res. Time';
                 }
                 field(EnableGuestFunctionality; EnableGuestFunctionality)
                 {
@@ -35,13 +41,21 @@ page 50108 ParkingLotSetup
                 {
                     ApplicationArea = All;
                 }
+                field(EnableTwoStepReservation; EnableTwoStepReservation)
+                {
+                    ApplicationArea = All;
+
+                }
+
             }
         }
     }
 
+    var
+        FirstStepReservationTimeVisible: Boolean;
+
     trigger OnOpenPage()
     begin
         If Not Get then Insert;
-
     end;
 }

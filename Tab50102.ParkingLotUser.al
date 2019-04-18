@@ -41,6 +41,12 @@ table 50102 ParkingLotUser
                 end;
             end;
         }
+
+        field(70; ParkingReservationPriority; Option)
+        {
+            Caption = 'Parking Reservation Priority';
+            OptionMembers = Low,High;
+        }
     }
 
     keys

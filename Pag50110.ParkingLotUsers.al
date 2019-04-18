@@ -37,6 +37,10 @@ page 50110 ParkingLotAppUsers
                 {
                     ApplicationArea = All;
                 }
+                field(ParkingReservationPriority; ParkingReservationPriority)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
         area(Factboxes)

@@ -27,6 +27,20 @@ table 50106 ParkingLotSetup
         {
             Caption = 'Absence Module Active';
         }
+        field(70; EnableTwoStepReservation; Boolean)
+        {
+            Caption = 'Two Step Reservation Active';
+
+            trigger OnValidate()
+            begin
+                if not EnableTwoStepReservation then
+                    FirstStepReservationTime := 0T;
+            end;
+        }
+        field(80; FirstStepReservationTime; Time)
+        {
+            Caption = 'First Step Reservation Time';
+        }
     }
 
     keys
