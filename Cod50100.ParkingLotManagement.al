@@ -124,6 +124,28 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.Modify();
     end;
 
+    procedure CheckAbsenceModule(User: Code[50]): Boolean
+    var
+        ParkingLotSetup: Record ParkingLotSetup;
+        EmployeeAbsence: Record "Employee Absence";
+        Employee: Record Employee;
+    begin
+        ParkingLotSetup.Get();
+        if ParkingLotSetup.AbsenceModuleActive then begin
+            Employee.SetRange(UserID, User);
+            if Employee.FindSet() then begin
+                EmployeeAbsence.SetRange("Employee No.", Employee."No.");
+                if EmployeeAbsence.FindSet() then begin
+                    repeat
+                        if (((today + 1) > EmployeeAbsence."From Date") and ((today + 1) < EmployeeAbsence."To Date")) then
+                            exit(true);
+                    until EmployeeAbsence.Next() = 0;
+                end;
+            end;
+        end;
+        exit(false);
+    end;
+
     var
         myInt: Integer;
         ReservedError: TextConst ENU = 'This space is already reserved';

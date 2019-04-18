@@ -33,6 +33,10 @@ page 50110 ParkingLotAppUsers
                 {
                     ApplicationArea = All;
                 }
+                field(EmployeeNo; EmployeeNo)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
         area(Factboxes)

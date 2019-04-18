@@ -23,6 +23,10 @@ table 50106 ParkingLotSetup
         {
             Caption = 'Enable Guest Functionality';
         }
+        field(60; AbsenceModuleActive; Boolean)
+        {
+            Caption = 'Absence Module Active';
+        }
     }
 
     keys

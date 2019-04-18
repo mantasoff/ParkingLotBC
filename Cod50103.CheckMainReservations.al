@@ -11,5 +11,4 @@ codeunit 50103 CheckMainReservations
             end until next = 0;
         end;
     end;
-
 }

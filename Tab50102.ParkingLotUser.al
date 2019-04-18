@@ -25,6 +25,22 @@ table 50102 ParkingLotUser
         {
             Caption = 'Car Registration Number';
         }
+        field(60; EmployeeNo; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Employee No.';
+            TableRelation = Employee;
+
+            trigger OnValidate()
+            var
+                Employee: Record Employee;
+            begin
+                if Employee.Get(EmployeeNo) then begin
+                    Employee.UserID := UserID;
+                    Employee.Modify();
+                end;
+            end;
+        }
     }
 
     keys

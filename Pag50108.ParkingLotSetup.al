@@ -31,6 +31,10 @@ page 50108 ParkingLotSetup
                 {
                     ApplicationArea = All;
                 }
+                field(AbsenceModuleActive; AbsenceModuleActive)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }
