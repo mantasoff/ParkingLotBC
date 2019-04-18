@@ -10,10 +10,12 @@ codeunit 50102 UncheckAndUndoAllReservations
                 repeat begin
                     IsReserved := false;
                     ReservedUntil := 0DT;
-                    if not ParkingLotManagement.CheckAbsenceModule(ParkingSpaces.MainUserID) then
-                        isApprovedByMainUser := false
-                    else
-                        isApprovedByMainUser := true;
+                    if MainUserID <> '' then begin
+                        if not ParkingLotManagement.CheckAbsenceModule(ParkingSpaces.MainUserID) then
+                            isApprovedByMainUser := false
+                        else
+                            isApprovedByMainUser := true;
+                    end;
                 end until next = 0;
             end;
         end;
