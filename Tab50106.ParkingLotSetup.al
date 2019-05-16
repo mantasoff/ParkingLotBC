@@ -41,6 +41,11 @@ table 50106 ParkingLotSetup
         {
             Caption = 'First Step Reservation Time';
         }
+        field(90; EnableChangeLog; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Enable Change Log';
+        }
     }
 
     keys

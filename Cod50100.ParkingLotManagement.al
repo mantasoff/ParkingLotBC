@@ -23,6 +23,7 @@ codeunit 50100 ParkingLotManagement
     procedure ReserveSpace(ParkingSpace: Record ParkingSpace; User: Code[50])
     var
         ParkingLotSetup: Record ParkingLotSetup;
+        ParkingLotChanges: Record ParkingLotChanges;
     begin
 
         if not IsUserParkingLotUser(User) then
@@ -31,9 +32,9 @@ codeunit 50100 ParkingLotManagement
             Error(UserIsNotAllowedError);
         if not IsUserFromGroup(ParkingSpace.SpaceType, User) then
             Error(UserNotInGroupError);
-        IF ParkingSpace.IsReserved then
-            Error(ReservedError);
-        if ParkingSpace.MainUserID <> User then
+        //IF ParkingSpace.IsReserved then
+        //    Error(ReservedError);
+        if ParkingSpace.PrivateUserID <> User then
             if isReservedByMainUser(ParkingSpace) then
                 Error(UserIsNotAllowedToReserveMainSpot);
         ParkingLotSetup.Get();
@@ -42,16 +43,20 @@ codeunit 50100 ParkingLotManagement
 
         end;
 
-        if ParkingSpace.MainUserID = User then
-            ParkingSpace.isApprovedByMainUser := true;
+        if ParkingSpace.PrivateUserID = User then
+            ParkingSpace.isApprovedByPrivateUser := true;
 
         ParkingSpace.IsReserved := true;
         ParkingSpace.ParkingLotUserID := USERID;
         ParkingSpace.ReservedUntil := GetReservationEndDate(ParkingSpace.SpaceType);
         ParkingSpace.MODIFY;
+
+        ParkingLotChanges.AddEntry(ParkingSpace.ParkingLotCode, ParkingSpace.Row, ParkingSpace.Column, UserId, 'Space Reserved', '');
     end;
 
     procedure CancelReservation(ParkingSpace: Record ParkingSpace; User: Code[50])
+    var
+        ParkingLotChanges: Record ParkingLotChanges;
     begin
         if not ParkingSpace.IsReserved then
             Error(NotReservedError);
@@ -62,6 +67,8 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.ParkingLotUserID := '';
         ParkingSpace.ReservedUntil := 0DT;
         ParkingSpace.Modify();
+
+        ParkingLotChanges.AddEntry(ParkingSpace.ParkingLotCode, ParkingSpace.Row, ParkingSpace.Column, UserId, 'Reservation Canceled', '');
     end;
 
     local procedure IsUserFromParkingLot(ParkingLotCode: Code[20]; User: Code[50]): Boolean
@@ -91,7 +98,7 @@ codeunit 50100 ParkingLotManagement
 
     procedure MainUserReservation(Space: Record ParkingSpace; User: Code[50])
     begin
-        if Space.MainUserID <> User then
+        if Space.PrivateUserID <> User then
             error(NotMainUser);
         ReserveSpace(Space, User);
 
@@ -102,19 +109,20 @@ codeunit 50100 ParkingLotManagement
 
     procedure isReservedByMainUser(Space: Record ParkingSpace): Boolean
     begin
-        if Space.MainUserID = '' then
+        if Space.PrivateUserID = '' then
             exit(false);
 
         if Space.IsReserved = true then
             exit(true);
 
-        if Space.isApprovedByMainUser = false then
+        if Space.isApprovedByPrivateUser = false then
             exit(true);
     end;
 
     procedure guestReservation(ParkingSpace: Record ParkingSpace; User: Code[50])
     var
         ParkingLotSetup: Record ParkingLotSetup;
+        ParkingLotChanges: Record ParkingLotChanges;
     begin
         ParkingLotSetup.Get;
         if ParkingSpace.IsReserved then
@@ -122,13 +130,15 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.IsReserved := true;
         ParkingSpace.ParkingLotUserID := User;
         ParkingSpace.isGuestReservation := true;
-        ParkingSpace.isApprovedByMainUser := true;
+        ParkingSpace.isApprovedByPrivateUser := true;
         if DT2Time(CurrentDateTime) > ParkingLotSetup.EndOfWorkTime then begin
             ParkingSpace.ReservedUntil := CreateDateTime(Today, ParkingLotSetup.EndOfWorkTime);
         end else begin
             ParkingSpace.ReservedUntil := CreateDateTime(Today + 1, ParkingLotSetup.EndOfWorkTime);
         end;
         ParkingSpace.Modify();
+
+        ParkingLotChanges.AddEntry(ParkingSpace.ParkingLotCode, ParkingSpace.Row, ParkingSpace.Column, UserId, 'Guest Reservation Enabled', '');
     end;
 
     procedure CheckAbsenceModule(User: Code[50]): Boolean

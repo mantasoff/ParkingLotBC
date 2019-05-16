@@ -8,11 +8,11 @@ codeunit 50103 CheckMainReservations
         ParkingLotSetup.Get;
         with ParkingSpace do begin
             repeat begin
-                if MainUserID <> '' then begin
-                    if isApprovedByMainUser = false then begin
+                if PrivateUserID <> '' then begin
+                    if isApprovedByPrivateUser = false then begin
                         ReservedUntil := CreateDateTime(Today + 1, ParkingLotSetup.EndOfWorkTime);
                         IsReserved := true;
-                        isApprovedByMainUser := true;
+                        isApprovedByPrivateUser := true;
                         Modify();
                     end;
                 end;

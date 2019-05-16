@@ -38,6 +38,14 @@ page 50100 ParkingLotUserRoleCenter
                 RunPageMode = Edit;
                 RunObject = Page ParkingLotSetup;
             }
+
+            action(PrivateParkingSpaces)
+            {
+                ApplicationArea = All;
+                Caption = 'Private Parking Spaces';
+                RunObject = Page MainParkingUserSpots;
+
+            }
             action(ParkingLotUsers)
             {
                 ApplicationArea = All;

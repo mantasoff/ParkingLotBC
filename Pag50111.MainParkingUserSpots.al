@@ -1,6 +1,6 @@
 page 50111 MainParkingUserSpots
 {
-    Caption = 'Main Parking User Spots';
+    Caption = 'Private Parking User Spots';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
@@ -42,11 +42,11 @@ page 50111 MainParkingUserSpots
                 {
                     ApplicationArea = All;
                 }
-                field(MainUserID; MainUserID)
+                field(PrivateUserID; PrivateUserID)
                 {
                     ApplicationArea = All;
                 }
-                field(isApprovedByMainUser; isApprovedByMainUser)
+                field(isApprovedByPrivateUser; isApprovedByPrivateUser)
                 {
                     ApplicationArea = All;
                 }
@@ -83,7 +83,7 @@ page 50111 MainParkingUserSpots
     }
     trigger OnOpenPage()
     begin
-        SetRange(MainUserID, UserId);
+        SetRange(PrivateUserID, UserId);
         //if Count = 0 then
         //    error(NoParkingSpaceRegisteredError);
     end;

@@ -11,10 +11,23 @@ table 50100 ParkingLot
         field(21; Adress; Text[200])
         {
             Caption = 'Adress';
+            trigger OnValidate()
+            var
+                ParkingLotChanges: Record ParkingLotChanges;
+            begin
+                ParkingLotChanges.AddEntry(Code, 0, 0, UserId, 'Address field changed from ' + xRec.Adress + ' to ' + Adress, '');
+            end;
         }
         field(30; Description; Text[200])
         {
             Caption = 'Description';
+
+            trigger OnValidate()
+            var
+                ParkingLotChanges: Record ParkingLotChanges;
+            begin
+                ParkingLotChanges.AddEntry(Code, 0, 0, UserId, 'Description field changed from ' + xRec.Description + ' to ' + Description, '');
+            end;
         }
     }
 
@@ -30,6 +43,7 @@ table 50100 ParkingLot
     var
         ParkingLotUsers: Record ParkingLotUsers;
         ParkingSpace: Record ParkingSpace;
+        ParkingLotChanges: Record ParkingLotChanges;
     begin
         ParkingLotUsers.SetRange(ParkingLotCode, Code);
         ParkingLotUsers.DeleteAll();
@@ -37,6 +51,20 @@ table 50100 ParkingLot
         ParkingSpace.SetRange(ParkingLotCode, Code);
         ParkingSpace.DeleteAll();
 
+        ParkingLotChanges.AddEntry(Code, 0, 0, UserId, 'Parking lot ' + Code + ' has been deleted', '');
     end;
 
+    trigger OnInsert()
+    var
+        ParkingLotChanges: Record ParkingLotChanges;
+    begin
+        ParkingLotChanges.AddEntry(Code, 0, 0, UserId, 'Parking lot ' + Code + ' created', '');
+    end;
+
+    trigger OnRename()
+    var
+        ParkingLotChanges: Record ParkingLotChanges;
+    begin
+        ParkingLotChanges.AddEntry(Code, 0, 0, UserId, 'Parking lot has been renamed from ' + xRec.Code + ' has been deleted to ' + Code, '');
+    end;
 }

@@ -60,14 +60,20 @@ table 50105 ParkingSpace
 
             end;
         }
-        field(60; MainUserID; Code[50])
+        field(60; PrivateUserID; Code[50])
         {
-            Caption = 'Main UserID';
+            Caption = 'Private UserID';
             TableRelation = "User Setup";
+            trigger OnValidate()
+            begin
+                if PrivateUserID <> '' then
+                    IsReserved := true;
+                ParkingLotUserID := PrivateUserID;
+            end;
         }
-        field(70; isApprovedByMainUser; Boolean)
+        field(70; isApprovedByPrivateUser; Boolean)
         {
-            Caption = 'Is Approved By Main User';
+            Caption = 'Is Approved By Private User';
         }
         field(80; isGuestReservation; Boolean)
         {
@@ -85,4 +91,25 @@ table 50105 ParkingSpace
     var
         BeforeTodayError: TextConst ENU = 'Selected date is before today';
 
+
+    trigger OnInsert()
+    var
+        ParkingLotChanges: Record ParkingLotChanges;
+    begin
+        ParkingLotChanges.AddEntry(ParkingLotCode, Row, Column, UserId, 'Record Inserted', '');
+    end;
+
+    trigger OnDelete()
+    var
+        ParkingLotChanges: Record ParkingLotChanges;
+    begin
+        ParkingLotChanges.AddEntry(ParkingLotCode, Row, Column, UserId, 'Record Deleted', '');
+    end;
+
+    trigger OnModify()
+    var
+        ParkingLotChanges: Record ParkingLotChanges;
+    begin
+        ParkingLotChanges.AddEntry(ParkingLotCode, Row, Column, UserId, 'Record Modified', '');
+    end;
 }

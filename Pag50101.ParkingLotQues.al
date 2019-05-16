@@ -70,8 +70,8 @@ page 50101 ParkingLotQues
         ParkingSpace.SetRange(IsReserved, true);
         ReservedParkingSpaces := ParkingSpace.Count;
 
-
-
+        ParkingLotChanges.SETRANGE(EntryDt, CreateDateTime(DT2Date(CurrentDateTime), 0T), CreateDateTime(DT2Date(CurrentDateTime), 235959T));
+        ChangeLogEntries := ParkingLotChanges.Count;
     end;
 
 

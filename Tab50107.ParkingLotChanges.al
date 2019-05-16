@@ -59,19 +59,29 @@ table 50107 ParkingLotChanges
     var
         ParkingLotChanges: Record ParkingLotChanges;
     begin
-        if ParkingLotChanges.FindLast() then;
-        EntryNo := ParkingLotChanges.EntryNo + 1;
-        EntryDT := CurrentDateTime;
+
     end;
 
     procedure AddEntry(ParkingLotCodeP: Code[50]; RowP: Integer; ColumnP: Integer; UserIDP: Code[50]; Description1P: Text[250]; Description2P: Text[250])
+    var
+        ParkingLotSetup: Record ParkingLotSetup;
+        ParkingLotChanges: Record ParkingLotChanges;
     begin
-        ParkingLotCode := ParkingLotCodeP;
-        Row := RowP;
-        Column := ColumnP;
-        UserID := UserIDP;
-        Description1 := Description1P;
-        Description2 := Description2P;
-        Insert(true);
+        if ParkingLotSetup.Get then begin
+            if ParkingLotSetup.EnableChangeLog then begin
+                ParkingLotCode := ParkingLotCodeP;
+                EntryDT := CurrentDateTime;
+                Row := RowP;
+                Column := ColumnP;
+                UserID := UserIDP;
+                Description1 := Description1P;
+                if ParkingLotChanges.FindLast() then;
+                EntryNo := ParkingLotChanges.EntryNo + 1;
+                EntryDT := CurrentDateTime;
+                Description2 := Description2P;
+                Insert(false);
+            end;
+        end;
+
     end;
 }

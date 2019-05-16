@@ -46,7 +46,10 @@ page 50108 ParkingLotSetup
                     ApplicationArea = All;
 
                 }
-
+                field(EnableChangeLog; EnableChangeLog)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }
