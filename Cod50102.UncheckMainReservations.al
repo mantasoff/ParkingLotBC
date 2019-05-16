@@ -8,16 +8,21 @@ codeunit 50102 UncheckAndUndoAllReservations
         with ParkingSpaces do begin
             if FindSet() then begin
                 repeat begin
-                    IsReserved := true;
+                    IsReserved := false;
                     ReservedUntil := 0DT;
                     isGuestReservation := false;
                     if PrivateUserID <> '' then begin
                         if not ParkingLotManagement.CheckAbsenceModule(ParkingSpaces.PrivateUserID) then begin
+                            IsReserved := true;
                             isApprovedByPrivateUser := false;
                             ParkingLotUserID := PrivateUserID;
-                        end else
+                        end else begin
+                            IsReserved := false;
                             isApprovedByPrivateUser := true;
+                        end;
+
                     end;
+                    Modify();
                 end until next = 0;
             end;
         end;

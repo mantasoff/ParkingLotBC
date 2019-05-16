@@ -24,6 +24,7 @@ codeunit 50100 ParkingLotManagement
     var
         ParkingLotSetup: Record ParkingLotSetup;
         ParkingLotChanges: Record ParkingLotChanges;
+        ParkingLotUser: Record ParkingLotUser;
     begin
 
         if not IsUserParkingLotUser(User) then
@@ -38,9 +39,14 @@ codeunit 50100 ParkingLotManagement
             if isReservedByMainUser(ParkingSpace) then
                 Error(UserIsNotAllowedToReserveMainSpot);
         ParkingLotSetup.Get();
-
-        if ParkingLotSetup.EnableTwoStepReservation then begin
-
+        ParkingLotUser.Get(User);
+        if ParkingLotSetup.EnableTwoStepReservation AND (User <> ParkingSpace.PrivateUserID) then begin
+            if DT2Time(CurrentDateTime) >= ParkingLotSetup.MainParkingLotReservationLimit then begin
+                if DT2Time(CurrentDateTime) <= ParkingLotSetup.FirstStepReservationTime then begin
+                    if ParkingLotUser.ParkingReservationPriority = ParkingLotUser.ParkingReservationPriority::Low then
+                        error('User has low priority reservation rights. Allowed to reserve space after: ' + Format(ParkingLotSetup.FirstStepReservationTime));
+                end;
+            end;
         end;
 
         if ParkingSpace.PrivateUserID = User then
@@ -50,7 +56,7 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.ParkingLotUserID := USERID;
         ParkingSpace.ReservedUntil := GetReservationEndDate(ParkingSpace.SpaceType);
         ParkingSpace.MODIFY;
-
+        Message('Reservation active until ' + Format(ParkingSpace.ReservedUntil));
         ParkingLotChanges.AddEntry(ParkingSpace.ParkingLotCode, ParkingSpace.Row, ParkingSpace.Column, UserId, 'Space Reserved', '');
     end;
 
@@ -66,8 +72,9 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.IsReserved := false;
         ParkingSpace.ParkingLotUserID := '';
         ParkingSpace.ReservedUntil := 0DT;
+        ParkingSpace.isGuestReservation := False;
         ParkingSpace.Modify();
-
+        Message('The reservation has been cancelled' + Format(ParkingSpace.ReservedUntil));
         ParkingLotChanges.AddEntry(ParkingSpace.ParkingLotCode, ParkingSpace.Row, ParkingSpace.Column, UserId, 'Reservation Canceled', '');
     end;
 
@@ -131,12 +138,14 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.ParkingLotUserID := User;
         ParkingSpace.isGuestReservation := true;
         ParkingSpace.isApprovedByPrivateUser := true;
-        if DT2Time(CurrentDateTime) > ParkingLotSetup.EndOfWorkTime then begin
+        if DT2Time(CurrentDateTime) < ParkingLotSetup.EndOfWorkTime then begin
             ParkingSpace.ReservedUntil := CreateDateTime(Today, ParkingLotSetup.EndOfWorkTime);
         end else begin
             ParkingSpace.ReservedUntil := CreateDateTime(Today + 1, ParkingLotSetup.EndOfWorkTime);
         end;
         ParkingSpace.Modify();
+
+        Message('Guest Reservation active until ' + Format(ParkingSpace.ReservedUntil));
 
         ParkingLotChanges.AddEntry(ParkingSpace.ParkingLotCode, ParkingSpace.Row, ParkingSpace.Column, UserId, 'Guest Reservation Enabled', '');
     end;

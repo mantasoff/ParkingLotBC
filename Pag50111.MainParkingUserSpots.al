@@ -72,11 +72,12 @@ page 50111 MainParkingUserSpots
             action(CancelReservation)
             {
                 ApplicationArea = All;
-                Caption = 'Cancel Reservation';
+                Caption = 'Stop Reservation';
                 Image = CancelLine;
                 trigger OnAction()
                 begin
-                    ParkingLotManagement.CancelReservation(Rec, UserId());
+                    if CONFIRM('Do you want to allow the space to be reserved by other users?') then
+                        ParkingLotManagement.CancelReservation(Rec, UserId());
                 end;
             }
         }
