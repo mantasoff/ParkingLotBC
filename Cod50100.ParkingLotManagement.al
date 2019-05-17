@@ -49,6 +49,12 @@ codeunit 50100 ParkingLotManagement
             end;
         end;
 
+        if ParkingLotSetup.AbsenceModuleActive then begin
+            if CheckAbsenceModule(User) then begin
+                Error('The User is currently absent!')
+            end;
+
+        end;
         if ParkingSpace.PrivateUserID = User then
             ParkingSpace.isApprovedByPrivateUser := true;
 
