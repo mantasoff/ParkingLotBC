@@ -25,6 +25,7 @@ codeunit 50100 ParkingLotManagement
         ParkingLotSetup: Record ParkingLotSetup;
         ParkingLotChanges: Record ParkingLotChanges;
         ParkingLotUser: Record ParkingLotUser;
+        GuestReservation: Record GuestReservation;
     begin
 
         if not IsUserParkingLotUser(User) then
@@ -61,6 +62,24 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.IsReserved := true;
         ParkingSpace.ParkingLotUserID := USERID;
         ParkingSpace.ReservedUntil := GetReservationEndDate(ParkingSpace.SpaceType);
+
+        GuestReservation.SetRange(ParkingLotCode, ParkingSpace.ParkingLotCode);
+        GuestReservation.SetRange(Row, ParkingSpace.Row);
+        GuestReservation.SetRange(Collumn, ParkingSpace.Column);
+        if GuestReservation.FindSet() then begin
+            repeat
+                if DT2Date(GuestReservation.FromDateTime) = DT2Date(ParkingSpace.ReservedUntil) then begin
+                    if GuestReservation.FromDateTime < ParkingSpace.ReservedUntil then begin
+                        if Confirm(StrSubstNo(GuestReservationTimeChange, ParkingSpace.ReservedUntil, GuestReservation.FromDateTime)) then begin
+                            ParkingSpace.ReservedUntil := GuestReservation.FromDateTime;
+                        end else begin
+                            Error('');
+                        end;
+                    end;
+                end;
+            until GuestReservation.Next = 0;
+        end;
+
         ParkingSpace.MODIFY;
         Message('Reservation active until ' + Format(ParkingSpace.ReservedUntil));
         ParkingLotChanges.AddEntry(ParkingSpace.ParkingLotCode, ParkingSpace.Row, ParkingSpace.Column, UserId, 'Space Reserved', '');
@@ -195,6 +214,7 @@ codeunit 50100 ParkingLotManagement
         end;
     end;
 
+
     var
         myInt: Integer;
         ReservedError: TextConst ENU = 'This space is already reserved';
@@ -208,4 +228,6 @@ codeunit 50100 ParkingLotManagement
         NotMainUser: TextConst ENU = 'You are not the Main user of this specific parking spot';
         AlreadyReservedByUser: TextConst ENU = 'This space is already reserved. Do you want to overwrite this reservation for the guest?';
         NotHighPriorityError: TextConst ENU = 'Your reservation priority is not high. You may need to wait up to an hour to be allowed to reserve a parking space';
+
+        GuestReservationTimeChange: TextConst ENU = 'You are not able to reserve until %1 due to the fact that there is a guest reservation. Is a reservation until %2 enough?';
 }

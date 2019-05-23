@@ -8,8 +8,6 @@
             "server": "http://ParkingSim",
             "serverInstance": "NAV",
             "authentication": "UserPassword",
-            "startupObjectId": 9028,
-            "startupObjectType": "Page",
             "breakOnError": true,
             "schemaUpdateMode": "Synchronize"
         }
