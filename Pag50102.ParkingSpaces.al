@@ -85,18 +85,18 @@ page 50102 ParkingSpaces
                 Visible = GuestVisibility;
                 trigger OnAction()
                 var
-                    GuestReservation: Record GuestReservation;
+                    Reservation: Record GuestReservation;
                 begin
                     //ParkingLotManagement.guestReservation(Rec, UserId);
-                    GuestReservation.ParkingLotCode := ParkingLotCode;
-                    GuestReservation.Row := Row;
-                    GuestReservation.Collumn := Column;
-                    GuestReservation.ParkingLotUser := UserId;
-                    GuestReservation.FromDateTime := CurrentDateTime;
-                    GuestReservation.FromDateTime := CurrentDateTime + 1;
-                    GuestReservation.Insert(true);
+                    Reservation.ParkingLotCode := ParkingLotCode;
+                    Reservation.Row := Row;
+                    Reservation.Collumn := Column;
+                    Reservation.ParkingLotUser := UserId;
+                    Reservation.FromDateTime := CurrentDateTime;
+                    Reservation.FromDateTime := CurrentDateTime + 1;
+                    Reservation.Insert(true);
                     Commit();
-                    Page.RunModal(Page::GuestReservationCard, GuestReservation);
+                    Page.RunModal(Page::GuestReservationCard, Reservation);
                 end;
             }
         }

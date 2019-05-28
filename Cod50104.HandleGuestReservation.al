@@ -2,21 +2,21 @@ codeunit 50104 HandleGuestReservation
 {
     trigger OnRun()
     var
-        GuestReservation: Record GuestReservation;
+        Reservation: Record GuestReservation;
         ParkingSpace: Record ParkingSpace;
     begin
-        if GuestReservation.findset then begin
+        if Reservation.findset then begin
             repeat begin
-                if (CurrentDateTime >= GuestReservation.FromDateTime) and (CurrentDateTime <= GuestReservation.ToDateTime) then begin
-                    if ParkingSpace.Get(GuestReservation.ParkingLotCode, GuestReservation.Row, GuestReservation.Collumn) then begin
+                if (CurrentDateTime >= Reservation.FromDateTime) and (CurrentDateTime <= Reservation.ToDateTime) then begin
+                    if ParkingSpace.Get(Reservation.ParkingLotCode, Reservation.Row, Reservation.Collumn) then begin
                         ParkingSpace.IsReserved := True;
                         ParkingSpace.isGuestReservation := true;
-                        ParkingSpace.ParkingLotUserID := GuestReservation.ParkingLotUser;
-                        ParkingSpace.ReservedUntil := GuestReservation.ToDateTime;
+                        ParkingSpace.ParkingLotUserID := Reservation.ParkingLotUser;
+                        ParkingSpace.ReservedUntil := Reservation.ToDateTime;
                         ParkingSpace.Modify();
                     end;
                 end;
-            end until GuestReservation.Next = 0;
+            end until Reservation.Next = 0;
         end;
 
         ParkingSpace.Reset();

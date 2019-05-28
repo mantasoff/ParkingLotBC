@@ -4,7 +4,7 @@ page 50116 GuestReservationList
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = GuestReservation;
-    Caption = 'Guest Reservation List';
+    Caption = 'Reservation List';
     InsertAllowed = false;
     ModifyAllowed = false;
     layout

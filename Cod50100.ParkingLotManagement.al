@@ -20,12 +20,51 @@ codeunit 50100 ParkingLotManagement
         exit(ParkingLotUser.GET(User));
     end;
 
+
+    procedure ReserveSpace2(ParkingSpace: Record ParkingSpace; User: Code[50])
+    var
+        ParkingLotSetup: Record ParkingLotSetup;
+        ParkingLotChanges: Record ParkingLotChanges;
+        ParkingLotUser: Record ParkingLotUser;
+        Reservation: Record GuestReservation;
+    begin
+        if not IsUserParkingLotUser(User) then
+            error(UserNotParkingLotUser);
+        if not IsUserFromParkingLot(ParkingSpace.ParkingLotCode, User) then
+            Error(UserIsNotAllowedError);
+        if not IsUserFromGroup(ParkingSpace.SpaceType, User) then
+            Error(UserNotInGroupError);
+        //IF ParkingSpace.IsReserved then
+        //    Error(ReservedError);
+        if ParkingSpace.PrivateUserID <> User then
+            if isReservedByMainUser(ParkingSpace) then
+                Error(UserIsNotAllowedToReserveMainSpot);
+        ParkingLotSetup.Get();
+        ParkingLotUser.Get(User);
+        if ParkingLotSetup.EnableTwoStepReservation AND (User <> ParkingSpace.PrivateUserID) then begin
+            if DT2Time(CurrentDateTime) >= ParkingLotSetup.MainParkingLotReservationLimit then begin
+                if DT2Time(CurrentDateTime) <= ParkingLotSetup.FirstStepReservationTime then begin
+                    if ParkingLotUser.ParkingReservationPriority = ParkingLotUser.ParkingReservationPriority::Low then
+                        error('User has low priority reservation rights. Allowed to reserve space after: ' + Format(ParkingLotSetup.FirstStepReservationTime));
+                end;
+            end;
+        end;
+
+        if ParkingLotSetup.AbsenceModuleActive then begin
+            if CheckAbsenceModule(User) then begin
+                Error('The User is currently absent!')
+            end;
+        end;
+
+
+    end;
+
     procedure ReserveSpace(ParkingSpace: Record ParkingSpace; User: Code[50])
     var
         ParkingLotSetup: Record ParkingLotSetup;
         ParkingLotChanges: Record ParkingLotChanges;
         ParkingLotUser: Record ParkingLotUser;
-        GuestReservation: Record GuestReservation;
+        Reservation: Record GuestReservation;
     begin
 
         if not IsUserParkingLotUser(User) then
@@ -54,8 +93,8 @@ codeunit 50100 ParkingLotManagement
             if CheckAbsenceModule(User) then begin
                 Error('The User is currently absent!')
             end;
-
         end;
+
         if ParkingSpace.PrivateUserID = User then
             ParkingSpace.isApprovedByPrivateUser := true;
 
@@ -63,22 +102,34 @@ codeunit 50100 ParkingLotManagement
         ParkingSpace.ParkingLotUserID := USERID;
         ParkingSpace.ReservedUntil := GetReservationEndDate(ParkingSpace.SpaceType);
 
-        GuestReservation.SetRange(ParkingLotCode, ParkingSpace.ParkingLotCode);
-        GuestReservation.SetRange(Row, ParkingSpace.Row);
-        GuestReservation.SetRange(Collumn, ParkingSpace.Column);
-        if GuestReservation.FindSet() then begin
+        Reservation.SetRange(ParkingLotCode, ParkingSpace.ParkingLotCode);
+        Reservation.SetRange(Row, ParkingSpace.Row);
+        Reservation.SetRange(Collumn, ParkingSpace.Column);
+        if Reservation.FindSet() then begin
             repeat
-                if DT2Date(GuestReservation.FromDateTime) = DT2Date(ParkingSpace.ReservedUntil) then begin
-                    if GuestReservation.FromDateTime < ParkingSpace.ReservedUntil then begin
-                        if Confirm(StrSubstNo(GuestReservationTimeChange, ParkingSpace.ReservedUntil, GuestReservation.FromDateTime)) then begin
-                            ParkingSpace.ReservedUntil := GuestReservation.FromDateTime;
+                if DT2Date(Reservation.FromDateTime) = DT2Date(ParkingSpace.ReservedUntil) then begin
+                    if Reservation.FromDateTime < ParkingSpace.ReservedUntil then begin
+                        if Confirm(StrSubstNo(GuestReservationTimeChange, ParkingSpace.ReservedUntil, Reservation.FromDateTime)) then begin
+                            ParkingSpace.ReservedUntil := Reservation.FromDateTime;
                         end else begin
                             Error('');
                         end;
                     end;
                 end;
-            until GuestReservation.Next = 0;
+            until Reservation.Next = 0;
         end;
+
+        Reservation.Reset();
+        Clear(Reservation);
+
+        Reservation.ParkingLotCode := ParkingSpace.ParkingLotCode;
+        Reservation.Collumn := ParkingSpace.Column;
+        Reservation.Row := ParkingSpace.Row;
+        Reservation.FromDateTime := CreateDateTime(DT2Date(ParkingSpace.ReservedUntil), ParkingLotSetup.ReservationStart);
+        Reservation.ReservationConfirmed := true;
+        Reservation.ToDateTime := ParkingSpace.ReservedUntil;
+        Reservation.ParkingLotUser := User;
+        Reservation.Insert(true);
 
         ParkingSpace.MODIFY;
         Message('Reservation active until ' + Format(ParkingSpace.ReservedUntil));

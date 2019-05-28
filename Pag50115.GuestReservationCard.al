@@ -4,7 +4,7 @@ page 50115 GuestReservationCard
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = GuestReservation;
-    Caption = 'Guest Reservation Card';
+    Caption = 'Reservation Card';
     layout
     {
         area(Content)

@@ -1,7 +1,7 @@
 table 50108 GuestReservation
 {
     DataClassification = ToBeClassified;
-
+    Caption = 'Reservation';
     fields
     {
         field(1; EntryNo; Integer)
@@ -56,6 +56,11 @@ table 50108 GuestReservation
             TableRelation = ParkingLotUser;
             Caption = 'Parking Lot User';
         }
+        field(90; GuestReservation; Boolean)
+        {
+            TableRelation = ParkingLotUser;
+            Caption = 'Guest Reservation';
+        }
     }
 
     keys
@@ -71,9 +76,9 @@ table 50108 GuestReservation
 
     trigger onInsert()
     var
-        GuestReservation: Record GuestReservation;
+        Reservation: Record GuestReservation;
     begin
-        if GuestReservation.findlast then;
-        EntryNo := GuestReservation.EntryNo + 1;
+        if Reservation.findlast then;
+        EntryNo := Reservation.EntryNo + 1;
     end;
 }
