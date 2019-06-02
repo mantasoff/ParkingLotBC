@@ -7,7 +7,7 @@ codeunit 50104 HandleGuestReservation
     begin
         if Reservation.findset then begin
             repeat begin
-                if (CurrentDateTime >= Reservation.FromDateTime) and (CurrentDateTime <= Reservation.ToDateTime) then begin
+                if (Reservation.GuestReservation = true) and (CurrentDateTime >= Reservation.FromDateTime) and (CurrentDateTime <= Reservation.ToDateTime) then begin
                     if ParkingSpace.Get(Reservation.ParkingLotCode, Reservation.Row, Reservation.Collumn) then begin
                         ParkingSpace.IsReserved := True;
                         ParkingSpace.isGuestReservation := true;

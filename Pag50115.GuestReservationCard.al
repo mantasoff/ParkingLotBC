@@ -78,7 +78,7 @@ page 50115 GuestReservationCard
                                 Error(SameDayTwoReservationError);
                         end;
                     until GuestReservation.Next = 0;
-
+                    Rec.GuestReservation := true;
 
                     if Confirm(ConfirmMessage) then
                         ReservationConfirmed := true;

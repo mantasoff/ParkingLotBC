@@ -20,6 +20,13 @@ table 50103 SpaceType
         field(40; ReservationPeriod; Integer)
         {
             Caption = 'Reservation Period (Minutes)';
+
+            trigger OnValidate()
+            begin
+                if ReservationPeriod <= 0 then begin
+                    Error('You cannot set a reservation period to a negative number');
+                end;
+            end;
         }
 
     }

@@ -81,6 +81,13 @@ page 50100 ParkingLotUserRoleCenter
                 RunPageMode = View;
                 RunObject = Page UserAllowedSpaceTypes;
             }
+            action(Reservations)
+            {
+                ApplicationArea = All;
+                Caption = 'Reservations';
+                RunPageMode = View;
+                RunObject = Page GuestReservationList;
+            }
         }
     }
 

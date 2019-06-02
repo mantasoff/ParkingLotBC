@@ -34,8 +34,6 @@ codeunit 50100 ParkingLotManagement
             Error(UserIsNotAllowedError);
         if not IsUserFromGroup(ParkingSpace.SpaceType, User) then
             Error(UserNotInGroupError);
-        //IF ParkingSpace.IsReserved then
-        //    Error(ReservedError);
         if ParkingSpace.PrivateUserID <> User then
             if isReservedByMainUser(ParkingSpace) then
                 Error(UserIsNotAllowedToReserveMainSpot);
@@ -73,8 +71,6 @@ codeunit 50100 ParkingLotManagement
             Error(UserIsNotAllowedError);
         if not IsUserFromGroup(ParkingSpace.SpaceType, User) then
             Error(UserNotInGroupError);
-        //IF ParkingSpace.IsReserved then
-        //    Error(ReservedError);
         if ParkingSpace.PrivateUserID <> User then
             if isReservedByMainUser(ParkingSpace) then
                 Error(UserIsNotAllowedToReserveMainSpot);

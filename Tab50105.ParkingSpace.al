@@ -13,12 +13,12 @@ table 50105 ParkingSpace
         field(2; Row; Integer)
         {
             Caption = 'Row';
-            MinValue = 0;
+            MinValue = 1;
         }
         field(3; Column; Integer)
         {
             Caption = 'Column';
-            MinValue = 0;
+            MinValue = 1;
         }
         field(21; SpaceType; Code[20])
         {
@@ -65,10 +65,17 @@ table 50105 ParkingSpace
             Caption = 'Private UserID';
             TableRelation = "User Setup";
             trigger OnValidate()
+            var
+                ParkingLotSetup: Record ParkingLotSetup;
             begin
                 if PrivateUserID <> '' then
                     IsReserved := true;
                 ParkingLotUserID := PrivateUserID;
+                ParkingLotSetup.Get;
+                ReservedUntil := CreateDateTime(DT2Date(CurrentDateTime), ParkingLotSetup.EndOfWorkTime);
+                if ReservedUntil < CurrentDateTime then begin
+                    ReservedUntil := CreateDateTime(DT2Date(ReservedUntil), DT2Time(ReservedUntil));
+                end;
             end;
         }
         field(70; isApprovedByPrivateUser; Boolean)
